@@ -3,7 +3,7 @@
 // Konfigurasi Database Railway
 // =============================================
 
-define('DB_HOST', 'localhost');
+define('DB_HOST', 'reseau.proxy.rlwy.net');
 define('DB_PORT', '41108');
 define('DB_USER', 'root');
 define('DB_PASS', 'JwoZALOXipGOZSnNZLVLtGeeIHjxpKNt');
