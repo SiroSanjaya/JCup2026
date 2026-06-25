@@ -6,7 +6,7 @@
 define('DB_HOST', 'reseau.proxy.rlwy.net');
 define('DB_PORT', '41108');
 define('DB_USER', 'root');
-define('DB_PASS', 'PASSWORD_BARU_KAMU'); // ganti kalau nanti regenerate
+define('DB_PASS', 'JwoZALOXipGOZSnNZLVLtGeeIHjxpKNt'); // ganti kalau nanti regenerate
 define('DB_NAME', 'railway');
 
 function getDB() {
