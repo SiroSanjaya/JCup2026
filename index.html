@@ -4,9 +4,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>JST Tournament 2026 – ADM Division</title>
+  <title>FRIENDLY CUP 2026</title>
   <link href="assets/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="assets/bootstrap-icons.min.css" rel="stylesheet">
   <style>
     :root {
       --gd: #052f4a;
@@ -65,7 +65,6 @@
       background: none;
     }
 
-    /* stat */
     .stat-card {
       border-radius: 12px;
       border: none;
@@ -83,7 +82,6 @@
       color: #6c757d;
     }
 
-    /* branch card */
     .branch-card {
       border-radius: 12px;
       border: 1px solid #e5e5e5;
@@ -155,7 +153,6 @@
       border-radius: 0;
     }
 
-    /* form */
     .form-card {
       border-radius: 12px;
       border: 1px solid #e5e5e5;
@@ -177,7 +174,7 @@
     }
 
     .branch-option:hover {
-      background: #f0faf5;
+      background: var(--gl);
       border-color: var(--gm);
     }
 
@@ -227,7 +224,6 @@
       color: var(--gd);
     }
 
-    /* badge */
     .badge {
       font-size: .7rem;
       font-weight: 500;
@@ -278,7 +274,6 @@
       color: #085041;
     }
 
-    /* skor */
     .skor-card {
       border-radius: 12px;
       border: 1px solid #e5e5e5;
@@ -354,7 +349,125 @@
       color: #856404;
     }
 
-    /* btn */
+    /* jadwal */
+    .jadwal-card {
+      border-radius: 12px;
+      border: 1px solid #e5e5e5;
+      background: white;
+      overflow: hidden;
+      margin-bottom: 10px;
+      transition: .15s;
+    }
+
+    .jadwal-card:hover {
+      box-shadow: 0 2px 8px rgba(0, 0, 0, .08);
+    }
+
+    .jadwal-head {
+      padding: .65rem 1rem;
+      border-bottom: 1px solid #f0f0f0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .jadwal-cabang {
+      font-size: .8rem;
+      color: #6c757d;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .jadwal-body {
+      padding: .9rem 1rem;
+    }
+
+    .jadwal-vs {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: .6rem;
+    }
+
+    .jadwal-tim {
+      flex: 1;
+      font-weight: 600;
+      font-size: .95rem;
+    }
+
+    .jadwal-tim.kanan {
+      text-align: right;
+    }
+
+    .jadwal-skor-sep {
+      font-size: .85rem;
+      color: #bbb;
+      flex-shrink: 0;
+    }
+
+    .jadwal-meta {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .jadwal-meta span {
+      font-size: .78rem;
+      color: #6c757d;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .status-badge {
+      font-size: .7rem;
+      font-weight: 600;
+      padding: 2px 9px;
+      border-radius: 100px;
+      white-space: nowrap;
+    }
+
+    .s-upcoming {
+      background: #fff3cd;
+      color: #856404;
+    }
+
+    .s-ongoing {
+      background: #cff4fc;
+      color: #055160;
+    }
+
+    .s-selesai {
+      background: #d1e7dd;
+      color: #0a3622;
+    }
+
+    .filter-tabs {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    .filter-tab {
+      padding: 5px 12px;
+      font-size: .8rem;
+      border-radius: 100px;
+      border: 1px solid #dee2e6;
+      cursor: pointer;
+      background: white;
+      color: #555;
+      transition: .12s;
+    }
+
+    .filter-tab.active {
+      background: var(--gd);
+      color: white;
+      border-color: var(--gd);
+    }
+
     .btn-daftar {
       background: var(--gd);
       border-color: var(--gd);
@@ -388,15 +501,39 @@
       font-size: .85rem;
       vertical-align: middle;
     }
+
+    /* --- CSS Login Admin --- */
+    body:not(.is-admin) .admin-only {
+      display: none !important;
+    }
+
+    body:not(.is-admin) .btn-del {
+      display: none !important;
+    }
+
+    /* Membuat tabel tampil penuh (100%) jika form disembunyikan */
+    body:not(.is-admin) .dynamic-col {
+      width: 100% !important;
+    }
   </style>
 </head>
 
 <body>
 
-  <div class="app-header">
+  <div class="app-header position-relative">
     <div style="font-size:1.9rem;margin-bottom:.3rem">🏆</div>
     <h1>FRIENDLY CUP 2026</h1>
     <p>Sistem Pendaftaran &amp; Rekap Skor</p>
+
+    <!-- Tombol Login / Logout -->
+    <div style="position: absolute; top: 15px; right: 20px;">
+      <button id="btn-login-modal" class="btn btn-sm btn-light" data-bs-toggle="modal" data-bs-target="#modalLogin"
+        style="font-size:.75rem;font-weight:600;color:var(--gd)"><i class="bi bi-shield-lock me-1"></i>Admin</a>
+        </li>
+      </button>
+      <button id="btn-logout" class="btn btn-sm btn-danger d-none" onclick="logoutAdmin()"
+        style="font-size:.75rem;font-weight:600;">Logout</button>
+    </div>
   </div>
 
   <div class="nav-tabs-wrap">
@@ -404,12 +541,16 @@
       <ul class="nav nav-tabs">
         <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#dashboard"><i
               class="bi bi-bar-chart-fill me-1"></i>Dashboard</a></li>
-        <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#daftar"><i
+        <li class="nav-item admin-only"><a class="nav-link" data-bs-toggle="tab" href="#daftar"><i
               class="bi bi-person-plus-fill me-1"></i>Daftar</a></li>
         <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#peserta"><i
               class="bi bi-people-fill me-1"></i>Peserta</a></li>
         <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#skor"><i
               class="bi bi-trophy-fill me-1"></i>Skor</a></li>
+        <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#jadwal"><i
+              class="bi bi-calendar3 me-1"></i>Jadwal</a></li>
+        <li class="nav-item d-none"><a class="nav-link" data-bs-toggle="tab" href="#forum"><i
+              class="bi bi-info-circle-fill me-1"></i>Forum</a></li>
       </ul>
     </div>
   </div>
@@ -440,8 +581,8 @@
           </div>
           <div class="col-6 col-md-3">
             <div class="card stat-card p-3 text-center">
-              <div class="stat-num" style="font-size:1rem" id="s-terbanyak">–</div>
-              <div class="stat-lbl">Cabang Terbanyak</div>
+              <div class="stat-num" id="s-jadwal">–</div>
+              <div class="stat-lbl">Jadwal Upcoming</div>
             </div>
           </div>
         </div>
@@ -457,13 +598,11 @@
               <p class="text-muted mb-3" style="font-size:.82rem">Pilih cabang lalu isi nama. Satu peserta bisa masuk
                 beberapa cabang sekaligus. Nama yang sama + cabang yang sama tidak bisa didaftarkan dua kali.</p>
               <div id="form-alert"></div>
-
               <div class="mb-3">
                 <label class="form-label fw-semibold" style="font-size:.85rem">Cabang Olahraga <small
                     class="text-muted fw-normal">(bisa lebih dari satu)</small></label>
                 <div class="row g-2" id="branch-options"></div>
               </div>
-
               <div class="mb-3">
                 <label class="form-label fw-semibold" style="font-size:.85rem">Nama Peserta</label>
                 <div id="nama-rows"></div>
@@ -471,7 +610,6 @@
                   <i class="bi bi-plus-circle me-1"></i>Tambah baris
                 </button>
               </div>
-
               <button class="btn btn-success btn-daftar w-100 mt-1" onclick="submitDaftar()">
                 <i class="bi bi-check2-circle me-1"></i>Daftarkan Semua
               </button>
@@ -510,7 +648,7 @@
       <!-- ═══ SKOR ═══ -->
       <div class="tab-pane fade" id="skor">
         <div class="row g-3">
-          <div class="col-md-5">
+          <div class="col-md-5 admin-only">
             <div class="form-card">
               <h6 class="fw-semibold mb-3">Input Hasil Pertandingan</h6>
               <div id="skor-alert"></div>
@@ -546,7 +684,7 @@
               </div>
               <div class="mb-3">
                 <label class="form-label fw-semibold" style="font-size:.85rem">Keterangan <small
-                    class="text-muted fw-normal">(opsional)</small></label>
+                    class="text-muted fw-normal"></small></label>
                 <input type="text" class="form-control form-control-sm" id="skor-ket"
                   placeholder="Penyisihan, semifinal, final...">
               </div>
@@ -555,7 +693,7 @@
               </button>
             </div>
           </div>
-          <div class="col-md-7">
+          <div class="col-md-7 dynamic-col">
             <div class="d-flex justify-content-between align-items-center mb-2">
               <h6 class="fw-semibold mb-0">Riwayat Pertandingan</h6>
               <select class="form-select form-select-sm" style="width:160px" id="filter-skor-cabang"
@@ -570,6 +708,129 @@
         </div>
       </div>
 
+      <!-- ═══ JADWAL ═══ -->
+      <div class="tab-pane fade" id="jadwal">
+        <div class="row g-3">
+          <div class="col-md-5 admin-only">
+            <div class="form-card">
+              <h6 class="fw-semibold mb-3">Tambah Jadwal Pertandingan</h6>
+              <div id="jadwal-alert"></div>
+              <div class="mb-3">
+                <label class="form-label fw-semibold" style="font-size:.85rem">Cabang Olahraga</label>
+                <select class="form-select form-select-sm" id="jadwal-cabang">
+                  <option value="">-- Pilih cabang --</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label class="form-label fw-semibold" style="font-size:.85rem">Lawan (Department)</label>
+                <input type="text" class="form-control form-control-sm" id="jadwal-timb"
+                  placeholder="Contoh: MFG 1, MFG 2, QC...">
+              </div>
+              <div class="row g-2 mb-3">
+                <div class="col-7">
+                  <label class="form-label fw-semibold" style="font-size:.85rem">Tanggal</label>
+                  <input type="date" class="form-control form-control-sm" id="jadwal-tgl">
+                </div>
+                <div class="col-5">
+                  <label class="form-label fw-semibold" style="font-size:.85rem">Jam</label>
+                  <input type="time" class="form-control form-control-sm" id="jadwal-jam">
+                </div>
+              </div>
+              <div class="mb-3">
+                <label class="form-label fw-semibold" style="font-size:.85rem">Lokasi <small
+                    class="text-muted fw-normal"></small></label>
+                <input type="text" class="form-control form-control-sm" id="jadwal-lokasi" value="PT. JST INDONESIA">
+              </div>
+              <div class="mb-3">
+                <label class="form-label fw-semibold" style="font-size:.85rem">Keterangan <small
+                    class="text-muted fw-normal"></small></label>
+                <input type="text" class="form-control form-control-sm" id="jadwal-ket"
+                  placeholder="Penyisihan grup, semifinal...">
+              </div>
+              <button class="btn btn-success btn-daftar w-100" onclick="submitJadwal()">
+                <i class="bi bi-calendar-plus me-1"></i>Simpan Jadwal
+              </button>
+            </div>
+          </div>
+          <div class="col-md-7 dynamic-col">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <h6 class="fw-semibold mb-0">Jadwal Pertandingan</h6>
+              <select class="form-select form-select-sm" style="width:165px" id="filter-jadwal-cabang"
+                onchange="filterJadwal()">
+                <option value="">Semua Cabang</option>
+              </select>
+            </div>
+            <div class="filter-tabs">
+              <button class="filter-tab active" onclick="setStatusFilter(this,'')">Semua</button>
+              <button class="filter-tab" onclick="setStatusFilter(this,'upcoming')">Upcoming</button>
+              <button class="filter-tab" onclick="setStatusFilter(this,'ongoing')">Berlangsung</button>
+              <button class="filter-tab" onclick="setStatusFilter(this,'selesai')">Selesai</button>
+            </div>
+            <div id="jadwal-list">
+              <div class="empty-state mt-3">Belum ada jadwal pertandingan.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ FORUM INFORMASI ═══ -->
+      <div class="tab-pane fade" id="forum">
+        <div class="row g-3">
+          <div class="col-md-5 admin-only">
+            <div class="form-card">
+              <h6 class="fw-semibold mb-3">Buat Informasi Baru</h6>
+              <div id="forum-alert"></div>
+              <div class="mb-3">
+                <label class="form-label fw-semibold" style="font-size:.85rem">Judul Informasi</label>
+                <input type="text" class="form-control form-control-sm" id="forum-judul"
+                  placeholder="Contoh: Info Technical Meeting...">
+              </div>
+              <div class="mb-3">
+                <label class="form-label fw-semibold" style="font-size:.85rem">Isi Pesan</label>
+                <textarea class="form-control form-control-sm" id="forum-konten" rows="4"
+                  placeholder="Tuliskan detail informasi..."></textarea>
+              </div>
+              <div class="mb-3">
+                <label class="form-label fw-semibold" style="font-size:.85rem">Upload Gambar <small
+                    class="text-muted fw-normal">(Bisa pilih lebih dari 1)</small></label>
+                <input type="file" class="form-control form-control-sm" id="forum-gambar" accept="image/*" multiple>
+              </div>
+              <button class="btn btn-success btn-daftar w-100" onclick="submitForum()">
+                <i class="bi bi-send-fill me-1"></i>Posting Informasi
+              </button>
+            </div>
+          </div>
+          <div class="col-md-7 dynamic-col">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <h6 class="fw-semibold mb-0">Feed Informasi</h6>
+            </div>
+            <div id="forum-list">
+              <div class="empty-state mt-4">Memuat informasi...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Modal Login Admin -->
+  <div class="modal fade" id="modalLogin" tabindex="-1">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header border-0 pb-0">
+          <h6 class="modal-title fw-semibold">Login Admin</h6>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body pt-2 pb-2">
+          <input type="password" id="input-password" class="form-control form-control-sm"
+            placeholder="Masukkan password..." onkeypress="if(event.key === 'Enter') loginAdmin()">
+          <div id="login-error" class="text-danger mt-1 d-none" style="font-size: .75rem;">Password salah!</div>
+        </div>
+        <div class="modal-footer border-0 pt-0">
+          <button class="btn btn-sm btn-success w-100" onclick="loginAdmin()">Masuk</button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -605,7 +866,62 @@
   <script src="assets/bootstrap.bundle.min.js"></script>
   <script>
     const API = 'api/index.php';
-    let allPeserta = [], allCabang = [], allSkor = [], selectedBranches = new Set();
+    let allPeserta = [], allCabang = [], allSkor = [], allJadwal = [], selectedBranches = new Set();
+    let activeStatusFilter = '';
+
+    /* ── Autentikasi Admin (Menggunakan Session PHP) ── */
+    async function loginAdmin() {
+      const pass = document.getElementById('input-password').value;
+
+      // Kirim password ke server PHP untuk dienkripsi & dicocokkan
+      const r = await fetch(`${API}?action=login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: pass })
+      }).then(r => r.json());
+
+      if (r.success) {
+        // Jika sukses, ubah tampilan
+        document.body.classList.add('is-admin');
+        document.getElementById('btn-login-modal').classList.add('d-none');
+        document.getElementById('btn-logout').classList.remove('d-none');
+
+        bootstrap.Modal.getInstance(document.getElementById('modalLogin')).hide();
+        document.getElementById('input-password').value = '';
+        document.getElementById('login-error').classList.add('d-none');
+
+        showToast('Berhasil login sebagai Admin');
+      } else {
+        // Tampilkan pesan error dari server
+        document.getElementById('login-error').textContent = r.error;
+        document.getElementById('login-error').classList.remove('d-none');
+      }
+    }
+
+    async function logoutAdmin() {
+      // Panggil API logout untuk menghapus session di server
+      await fetch(`${API}?action=logout`);
+
+      document.body.classList.remove('is-admin');
+      document.getElementById('btn-login-modal').classList.remove('d-none');
+      document.getElementById('btn-logout').classList.add('d-none');
+
+      if (document.getElementById('daftar').classList.contains('active')) {
+        bootstrap.Tab.getOrCreateInstance(document.querySelector('.nav-link[href="#dashboard"]')).show();
+      }
+
+      showToast('Anda telah logout');
+    }
+
+    async function checkSession() {
+      // Cek ke server apakah browser ini masih punya session admin yang aktif
+      const r = await fetch(`${API}?action=check_auth`).then(r => r.json());
+      if (r.is_admin) {
+        document.body.classList.add('is-admin');
+        document.getElementById('btn-login-modal').classList.add('d-none');
+        document.getElementById('btn-logout').classList.remove('d-none');
+      }
+    }
 
     function initials(n) { return n.split(' ').map(w => w[0] || '').slice(0, 2).join('').toUpperCase(); }
     function esc(s) { return s.replace(/\\/g, '\\\\').replace(/'/g, "\\'"); }
@@ -628,18 +944,23 @@
       if (!r.success) return;
       allCabang = r.data;
       document.getElementById('branch-options').innerHTML = r.data.map(c => `
-    <div class="col-6 col-sm-4">
-      <div class="branch-option" id="opt-${c.id}" onclick="toggleBranch('${c.id}')">
-        <span style="font-size:1.1rem">${c.emoji}</span>
-        <span style="flex:1;line-height:1.3">${c.nama}${c.max_peserta ? `<br><small class="fw-normal" style="color:inherit;opacity:.7">max ${c.max_peserta}</small>` : ''}</span>
-        <i class="bi bi-check-circle-fill chk-icon"></i>
-      </div>
-    </div>`).join('');
+        <div class="col-6 col-sm-4">
+          <div class="branch-option" id="opt-${c.id}" onclick="toggleBranch('${c.id}')">
+            <span style="font-size:1.1rem">${c.emoji}</span>
+            <span style="flex:1;line-height:1.3">${c.nama}${c.max_peserta ? `<br><small class="fw-normal" style="color:inherit;opacity:.7">max ${c.max_peserta}</small>` : ''}</span>
+            <i class="bi bi-check-circle-fill chk-icon"></i>
+          </div>
+        </div>`).join('');
       const sel = document.getElementById('skor-cabang');
       const sel2 = document.getElementById('filter-skor-cabang');
+      const sel3 = document.getElementById('jadwal-cabang');
+      const sel4 = document.getElementById('filter-jadwal-cabang');
       r.data.forEach(c => {
-        sel.innerHTML += `<option value="${c.id}">${c.emoji} ${c.nama}</option>`;
-        sel2.innerHTML += `<option value="${c.id}">${c.emoji} ${c.nama}</option>`;
+        const opt = `<option value="${c.id}">${c.emoji} ${c.nama}</option>`;
+        sel.innerHTML += opt;
+        sel2.innerHTML += opt;
+        sel3.innerHTML += opt;
+        sel4.innerHTML += opt;
       });
     }
     function toggleBranch(id) {
@@ -656,8 +977,8 @@
       const d = document.createElement('div');
       d.className = 'nama-row';
       d.innerHTML = `<span class="num">${idx}</span>
-    <input type="text" class="form-control form-control-sm nama-input" placeholder="Nama peserta ${idx}...">
-    <button class="btn btn-sm btn-outline-danger btn-del" onclick="removeRow(this)"><i class="bi bi-x"></i></button>`;
+        <input type="text" class="form-control form-control-sm nama-input" placeholder="Nama peserta ${idx}...">
+        <button class="btn btn-sm btn-outline-danger btn-del" onclick="removeRow(this)"><i class="bi bi-x"></i></button>`;
       c.appendChild(d);
       renumber();
       d.querySelector('input').focus();
@@ -688,10 +1009,8 @@
           method: 'POST', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ nama, branches })
         }).then(r => r.json());
-        if (r.success) {
-          okTotal++;
-          if (r.warnings && r.warnings.length) warnings.push(...r.warnings);
-        } else errors.push(r.error);
+        if (r.success) { okTotal++; if (r.warnings && r.warnings.length) warnings.push(...r.warnings); }
+        else errors.push(r.error);
       }
       if (okTotal) showToast(`✓ ${okTotal} peserta berhasil didaftarkan!`);
       const msgs = [...errors, ...warnings];
@@ -713,23 +1032,22 @@
       document.getElementById('s-peserta').textContent = d.total_peserta;
       document.getElementById('s-pendaftaran').textContent = d.total_pendaftaran;
       document.getElementById('s-menang').textContent = d.total_menang;
-      const top = (d.cabang || []).reduce((a, b) => +b.jumlah > +a.jumlah ? b : a, d.cabang[0] || {});
-      document.getElementById('s-terbanyak').innerHTML = top.emoji ? `${top.emoji} ${top.nama}` : '–';
+      document.getElementById('s-jadwal').textContent = d.jadwal_upcoming || 0;
       const maxJ = Math.max(...(d.cabang || []).map(c => +c.jumlah), 1);
       document.getElementById('branch-grid').innerHTML = (d.cabang || []).map(c => `
-    <div class="col-12 col-sm-6 col-lg-4">
-      <div class="branch-card">
-        <div class="card-header d-flex align-items-center gap-2">
-          <span style="font-size:1.3rem">${c.emoji}</span>
-          <div style="flex:1">
-            <div class="branch-title">${c.nama}</div>
-            <div class="branch-count">${c.jumlah} peserta${c.max_peserta ? ' / max ' + c.max_peserta : ''}</div>
+        <div class="col-12 col-sm-6 col-lg-4">
+          <div class="branch-card">
+            <div class="card-header d-flex align-items-center gap-2">
+              <span style="font-size:1.3rem">${c.emoji}</span>
+              <div style="flex:1">
+                <div class="branch-title">${c.nama}</div>
+                <div class="branch-count">${c.jumlah} peserta${c.max_peserta ? ' / max ' + c.max_peserta : ''}</div>
+              </div>
+            </div>
+            <div class="progress"><div class="progress-bar" style="width:${Math.round(+c.jumlah / maxJ * 100)}%;background:${BC[c.id] || '#999'}"></div></div>
+            <div class="player-list-body" id="list-${c.id}"><div class="empty-state">Memuat...</div></div>
           </div>
-        </div>
-        <div class="progress"><div class="progress-bar" style="width:${Math.round(+c.jumlah / maxJ * 100)}%;background:${BC[c.id] || '#999'}"></div></div>
-        <div class="player-list-body" id="list-${c.id}"><div class="empty-state">Memuat...</div></div>
-      </div>
-    </div>`).join('');
+        </div>`).join('');
       await loadBranchLists();
     }
 
@@ -737,8 +1055,6 @@
       const r = await fetch(`${API}?action=get_peserta`).then(r => r.json());
       if (!r.success) return;
       allPeserta = r.data;
-      // group by cabang_id untuk dashboard cards
-      // cabang sekarang adalah array of object: {row_id, cabang_id, cabang_nama, emoji}
       const byBranch = {};
       allPeserta.forEach(p => (p.cabang || []).forEach(c => {
         const bid = c.cabang_id;
@@ -749,15 +1065,15 @@
         const el = document.getElementById('list-' + bid);
         if (!el) return;
         el.innerHTML = list.map((p, i) => `
-      <div class="player-item">
-        <span class="player-num">${i + 1}.</span>
-        <div class="avatar">${initials(p.nama)}</div>
-        <span style="flex:1">${p.nama}</span>
-        <button class="btn btn-outline-danger btn-del" title="Hapus dari cabang ini"
-          onclick="mintaHapusRow(${p.rowId},'${esc(p.nama)}')">
-          <i class="bi bi-trash3" style="font-size:.7rem"></i>
-        </button>
-      </div>`).join('');
+          <div class="player-item">
+            <span class="player-num">${i + 1}.</span>
+            <div class="avatar">${initials(p.nama)}</div>
+            <span style="flex:1">${p.nama}</span>
+            <button class="btn btn-outline-danger btn-del" title="Hapus dari cabang ini"
+              onclick="mintaHapusRow(${p.rowId},'${esc(p.nama)}')">
+              <i class="bi bi-trash3" style="font-size:.7rem"></i>
+            </button>
+          </div>`).join('');
       });
       document.querySelectorAll('.player-list-body').forEach(el => {
         if (el.innerHTML.includes('Memuat')) el.innerHTML = '<div class="empty-state">Belum ada peserta</div>';
@@ -765,37 +1081,25 @@
       renderPeserta(allPeserta);
     }
 
-    /* ── Tabel peserta: 1 baris per nama, cabang merge ── */
+    /* ── Tabel peserta ── */
     function renderPeserta(data) {
       const tb = document.getElementById('peserta-tbody');
       if (!data.length) { tb.innerHTML = '<tr><td colspan="5" class="text-center text-muted py-3">Tidak ada peserta</td></tr>'; return; }
       tb.innerHTML = data.map((p, i) => {
         const badges = (p.cabang || []).map(c => `<span class="badge b-${c.cabang_id} me-1">${c.emoji} ${c.cabang_nama}</span>`).join('');
         return `<tr>
-      <td class="text-muted">${i + 1}</td>
-      <td><div class="d-flex align-items-center gap-2"><div class="avatar">${initials(p.nama)}</div><strong>${p.nama}</strong></div></td>
-      <td>${badges}</td>
-      <td class="text-muted" style="font-size:.74rem;white-space:nowrap">${fmt(p.created_at)}</td>
-      <td>
-        <button class="btn btn-sm btn-outline-danger btn-del" title="Hapus semua cabang peserta ini"
-          onclick="mintaHapusNama('${esc(p.nama)}')">
-          <i class="bi bi-trash3"></i>
-        </button>
-      </td>
-    </tr>`;
+          <td class="text-muted">${i + 1}</td>
+          <td><div class="d-flex align-items-center gap-2"><div class="avatar">${initials(p.nama)}</div><strong>${p.nama}</strong></div></td>
+          <td>${badges}</td>
+          <td class="text-muted" style="font-size:.74rem;white-space:nowrap">${fmt(p.created_at)}</td>
+          <td><button class="btn btn-sm btn-outline-danger btn-del" title="Hapus semua cabang peserta ini"
+            onclick="mintaHapusNama('${esc(p.nama)}')"><i class="bi bi-trash3"></i></button></td>
+        </tr>`;
       }).join('');
     }
     function filterTable(q) { renderPeserta(q ? allPeserta.filter(p => p.nama.toLowerCase().includes(q.toLowerCase())) : allPeserta); }
 
     /* ── Skor ── */
-    document.addEventListener('DOMContentLoaded', () => {
-      document.getElementById('skor-lawan').addEventListener('input', function () {
-        document.getElementById('lawan-label').textContent = this.value.toUpperCase() || 'LAWAN';
-      });
-      document.getElementById('skor-tanggal').value = new Date().toISOString().split('T')[0];
-      addNamaRow(); addNamaRow(); addNamaRow();
-    });
-
     async function submitSkor() {
       const cabang = document.getElementById('skor-cabang').value;
       const lawan = document.getElementById('skor-lawan').value.trim();
@@ -841,29 +1145,131 @@
             '<span class="res-badge draw-b">SERI</span>';
         const c = allCabang.find(x => x.id === s.cabang_id) || { emoji: '', nama: s.cabang_id };
         return `<div class="skor-card">
-      <div class="sc-head">
-        <span>${c.emoji} ${c.nama}${s.keterangan ? ' · <em>' + s.keterangan + '</em>' : ''}</span>
-        <div class="d-flex align-items-center gap-2 flex-shrink-0">
-          <span style="font-size:.74rem">${fmtD(s.tanggal)}</span>
-          ${badge}
-          <button class="btn btn-outline-danger btn-del" onclick="mintaHapusSkor(${s.id})" title="Hapus">
-            <i class="bi bi-trash3" style="font-size:.7rem"></i>
-          </button>
-        </div>
-      </div>
-      <div class="skor-vs">
-        <div class="skor-team">
-          <div class="skor-team-name">ADM</div>
-          <div class="skor-team-score ${hasil === 'kalah' ? 'lose' : ''}">${a}</div>
-        </div>
-        <div class="skor-sep">VS</div>
-        <div class="skor-team">
-          <div class="skor-team-name">${s.lawan}</div>
-          <div class="skor-team-score ${hasil === 'menang' ? 'lose' : ''}">${l}</div>
-        </div>
-      </div>
-    </div>`;
+          <div class="sc-head">
+            <span>${c.emoji} ${c.nama}${s.keterangan ? ' · <em>' + s.keterangan + '</em>' : ''}</span>
+            <div class="d-flex align-items-center gap-2 flex-shrink-0">
+              <span style="font-size:.74rem">${fmtD(s.tanggal)}</span>
+              ${badge}
+              <button class="btn btn-outline-danger btn-del" onclick="mintaHapusSkor(${s.id})" title="Hapus">
+                <i class="bi bi-trash3" style="font-size:.7rem"></i>
+              </button>
+            </div>
+          </div>
+          <div class="skor-vs">
+            <div class="skor-team"><div class="skor-team-name">ADM</div><div class="skor-team-score ${hasil === 'kalah' ? 'lose' : ''}">${a}</div></div>
+            <div class="skor-sep">VS</div>
+            <div class="skor-team"><div class="skor-team-name">${s.lawan}</div><div class="skor-team-score ${hasil === 'menang' ? 'lose' : ''}">${l}</div></div>
+          </div>
+        </div>`;
       }).join('');
+    }
+
+    /* ── Jadwal ── */
+    async function submitJadwal() {
+      const cabang = document.getElementById('jadwal-cabang').value;
+      const timb = document.getElementById('jadwal-timb').value.trim();
+      const tgl = document.getElementById('jadwal-tgl').value;
+      const jam = document.getElementById('jadwal-jam').value;
+      const lokasi = document.getElementById('jadwal-lokasi').value.trim();
+      const ket = document.getElementById('jadwal-ket').value.trim();
+      if (!cabang) { setAlert('jadwal-alert', 'Pilih cabang olahraga.'); return; }
+      if (!timb) { setAlert('jadwal-alert', 'Tulis nama department lawan.'); return; }
+      if (!tgl || !jam) { setAlert('jadwal-alert', 'Tanggal dan jam wajib diisi.'); return; }
+      setAlert('jadwal-alert', '');
+      const r = await fetch(`${API}?action=tambah_jadwal`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ cabang_id: cabang, tim_b: timb, tanggal: tgl, jam, lokasi, keterangan: ket })
+      }).then(r => r.json());
+      if (r.success) {
+        showToast('✓ Jadwal berhasil disimpan!');
+        document.getElementById('jadwal-timb').value = '';
+        document.getElementById('jadwal-lokasi').value = '';
+        document.getElementById('jadwal-ket').value = '';
+        loadJadwal(); loadStats();
+      } else setAlert('jadwal-alert', r.error || 'Gagal menyimpan.');
+    }
+
+    async function loadJadwal() {
+      const r = await fetch(`${API}?action=get_jadwal`).then(r => r.json());
+      if (!r.success) return;
+      allJadwal = r.data;
+      filterJadwal();
+    }
+    function setStatusFilter(btn, status) {
+      activeStatusFilter = status;
+      document.querySelectorAll('.filter-tab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      filterJadwal();
+    }
+    function filterJadwal() {
+      const cabang = document.getElementById('filter-jadwal-cabang').value;
+      let data = allJadwal;
+      if (cabang) data = data.filter(j => j.cabang_id === cabang);
+      if (activeStatusFilter) data = data.filter(j => j.status === activeStatusFilter);
+      renderJadwal(data);
+    }
+    function renderJadwal(data) {
+      const el = document.getElementById('jadwal-list');
+      if (!data.length) { el.innerHTML = '<div class="empty-state mt-3">Tidak ada jadwal.</div>'; return; }
+      const byDate = {};
+      data.forEach(j => { if (!byDate[j.tanggal]) byDate[j.tanggal] = []; byDate[j.tanggal].push(j); });
+      el.innerHTML = Object.entries(byDate).map(([tgl, items]) => `
+        <div class="mb-1" style="font-size:.78rem;font-weight:600;color:#6c757d;padding:4px 0 2px;letter-spacing:.3px;">${fmtD(tgl)}</div>
+        ${items.map(j => {
+        const sCls = j.status === 'upcoming' ? 's-upcoming' : j.status === 'ongoing' ? 's-ongoing' : 's-selesai';
+        const sLbl = j.status === 'upcoming' ? 'Upcoming' : j.status === 'ongoing' ? 'Berlangsung' : 'Selesai';
+        const jamFmt = j.jam ? j.jam.substring(0, 5) : '';
+        return `<div class="jadwal-card" style="position: relative; overflow: visible !important;">
+            <div class="jadwal-head">
+              <div class="jadwal-cabang">
+                <span>${j.cabang_emoji}</span><span>${j.cabang_nama}</span>
+                ${j.keterangan ? `<span style="color:#bbb">·</span><em style="font-size:.75rem">${j.keterangan}</em>` : ''}
+              </div>
+              <div class="d-flex align-items-center gap-2">
+                <span class="status-badge ${sCls}">${sLbl}</span>
+                <div class="dropdown">
+                  <button class="btn btn-sm btn-outline-secondary btn-del" data-bs-toggle="dropdown">
+                    <i class="bi bi-three-dots-vertical"></i>
+                  </button>
+                  <ul class="dropdown-menu dropdown-menu-end" style="font-size:.82rem;min-width:150px; z-index: 99999 !important;">
+                    <li><span class="dropdown-item-text text-muted" style="font-size:.75rem">Ubah Status:</span></li>
+                    <li><a class="dropdown-item" href="#" onclick="ubahStatus(${j.id},'upcoming');return false"><i class="bi bi-clock me-2 text-warning"></i>Upcoming</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="ubahStatus(${j.id},'ongoing');return false"><i class="bi bi-play-circle me-2 text-info"></i>Berlangsung</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="ubahStatus(${j.id},'selesai');return false"><i class="bi bi-check-circle me-2 text-success"></i>Selesai</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item text-danger" href="#" onclick="mintaHapusJadwal(${j.id});return false"><i class="bi bi-trash3 me-2"></i>Hapus</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="jadwal-body">
+              <div class="jadwal-vs">
+                <div class="jadwal-tim">ADM</div>
+                <div class="jadwal-skor-sep">VS</div>
+                <div class="jadwal-tim kanan">${j.tim_b}</div>
+              </div>
+              <div class="jadwal-meta">
+                <span><i class="bi bi-clock"></i>${jamFmt} WIB</span>
+                ${j.lokasi ? `<span><i class="bi bi-geo-alt"></i>${j.lokasi}</span>` : ''}
+              </div>
+            </div>
+          </div>`;
+      }).join('')}`).join('');
+    }
+    async function ubahStatus(id, status) {
+      const r = await fetch(`${API}?action=update_status_jadwal`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, status })
+      }).then(r => r.json());
+      if (r.success) { showToast('Status diperbarui.'); loadJadwal(); loadStats(); }
+      else showToast('Gagal update status.', false);
+    }
+    function mintaHapusJadwal(id) {
+      showModal('Jadwal ini akan dihapus permanen.', async () => {
+        const r = await fetch(`${API}?action=hapus_jadwal&id=${id}`).then(r => r.json());
+        r.success ? showToast('Jadwal dihapus.') : showToast('Gagal.', false);
+        loadJadwal(); loadStats();
+      });
     }
 
     /* ── Modal hapus generik ── */
@@ -875,8 +1281,6 @@
       };
       bootstrap.Modal.getOrCreateInstance(document.getElementById('modalHapus')).show();
     }
-
-    // Hapus 1 baris (dari dashboard card) = hapus dari satu cabang saja
     function mintaHapusRow(rowId, nama) {
       showModal(`Hapus <strong>${nama}</strong> dari cabang ini saja?`, async () => {
         const r = await fetch(`${API}?action=hapus&id=${rowId}`).then(r => r.json());
@@ -884,8 +1288,6 @@
         loadStats();
       });
     }
-
-    // Hapus semua cabang milik satu nama (dari tabel peserta)
     function mintaHapusNama(nama) {
       showModal(`Hapus <strong>${nama}</strong> dari <u>semua cabang</u>?`, async () => {
         const r = await fetch(`${API}?action=hapus_nama`, {
@@ -896,7 +1298,6 @@
         loadStats();
       });
     }
-
     function mintaHapusSkor(id) {
       showModal('Data pertandingan ini akan dihapus permanen.', async () => {
         const r = await fetch(`${API}?action=hapus_skor&id=${id}`).then(r => r.json());
@@ -905,10 +1306,101 @@
       });
     }
 
+    /* ── Forum Informasi ── */
+    async function submitForum() {
+      const judul = document.getElementById('forum-judul').value.trim();
+      const konten = document.getElementById('forum-konten').value.trim();
+      const fileInput = document.getElementById('forum-gambar');
+
+      if (!judul || !konten) { setAlert('forum-alert', 'Judul dan isi pesan wajib diisi.'); return; }
+
+      // Menggunakan FormData karena kita mengirim file (gambar)
+      const formData = new FormData();
+      formData.append('judul', judul);
+      formData.append('konten', konten);
+
+      for (let i = 0; i < fileInput.files.length; i++) {
+        formData.append('gambar[]', fileInput.files[i]);
+      }
+
+      setAlert('forum-alert', '');
+
+      const r = await fetch(`${API}?action=tambah_forum`, {
+        method: 'POST',
+        body: formData // Browser akan otomatis mengatur Content-Type untuk multipart/form-data
+      }).then(r => r.json());
+
+      if (r.success) {
+        showToast('✓ Informasi berhasil diposting!');
+        document.getElementById('forum-judul').value = '';
+        document.getElementById('forum-konten').value = '';
+        fileInput.value = '';
+        loadForum();
+      } else {
+        setAlert('forum-alert', r.error || 'Gagal memposting.');
+      }
+    }
+
+    async function loadForum() {
+      const r = await fetch(`${API}?action=get_forum`).then(r => r.json());
+      if (!r.success) return;
+      const data = r.data;
+      const el = document.getElementById('forum-list');
+
+      if (!data.length) {
+        el.innerHTML = '<div class="empty-state mt-3">Belum ada informasi yang diposting.</div>';
+        return;
+      }
+
+      el.innerHTML = data.map(f => {
+        let imagesHtml = '';
+        if (f.gambar && f.gambar.length > 0) {
+          imagesHtml = `<div class="d-flex flex-wrap gap-2 mt-3">` +
+            f.gambar.map(g => `<img src="${g}" class="img-thumbnail shadow-sm" style="height: 100px; width: 100px; object-fit: cover; border-radius: 8px; cursor: pointer;" onclick="window.open('${g}', '_blank')" alt="Attachment">`).join('') +
+            `</div>`;
+        }
+
+        return `<div class="card mb-3 border-0 shadow-sm" style="border-radius:12px;">
+          <div class="card-body p-3">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <div>
+                <h6 class="fw-bold mb-0 text-dark">${f.judul}</h6>
+                <div class="text-muted" style="font-size: .72rem;"><i class="bi bi-clock me-1"></i>${fmt(f.created_at)}</div>
+              </div>
+              <button class="btn btn-sm btn-outline-danger btn-del admin-only" onclick="mintaHapusForum(${f.id})" title="Hapus Pengumuman"><i class="bi bi-trash3"></i></button>
+            </div>
+            <div style="font-size: .85rem; white-space: pre-wrap; color: #444;">${f.konten}</div>
+            ${imagesHtml}
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    function mintaHapusForum(id) {
+      showModal('Pengumuman ini beserta semua gambarnya akan dihapus secara permanen.', async () => {
+        const r = await fetch(`${API}?action=hapus_forum&id=${id}`).then(r => r.json());
+        r.success ? showToast('Informasi dihapus.') : showToast('Gagal menghapus.', false);
+        loadForum();
+      });
+    }
+
     /* ── Init ── */
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('skor-lawan').addEventListener('input', function () {
+        document.getElementById('lawan-label').textContent = this.value.toUpperCase() || 'LAWAN';
+      });
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('skor-tanggal').value = today;
+      document.getElementById('jadwal-tgl').value = today;
+      addNamaRow(); addNamaRow(); addNamaRow();
+    });
+
+    checkSession(); // <--- TAMBAHKAN INI DI SINI
     loadBranchOptions();
     loadStats();
     loadSkor();
+    loadJadwal();
+    // loadForum();
   </script>
 </body>
 
